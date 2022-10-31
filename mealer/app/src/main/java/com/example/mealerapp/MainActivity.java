@@ -54,9 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void UserLogin() {
+        //Getting information and trimming it to a string
         String MotDePasse = editTextPassword.getText().toString().trim();
         String adressecourriel= editTextAdresseCourriel.getText().toString().trim();
-
+//Getting information from editTextes  MotDePasse and Email
         if (MotDePasse.isEmpty()) {
             editTextPassword.setError(" Mot de passse est requis");
            editTextPassword.requestFocus();
@@ -85,26 +86,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    String user =task.getResult().getUser().getUid();
-                    FirebaseDatabase.getInstance().getReference().child("Clients").child(user).child("userType").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String userType=snapshot.getValue(String.class);
-
-                            if(userType.equals("Client")){
-                                startActivity(new Intent(MainActivity.this, WelcomeClientActivity.class));
-                            }
-                            else if(userType.equals("Cooker")){
-                                startActivity(new Intent(MainActivity.this, WelcomeCookActivity.class));
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    //getting user userType and use it to sign him in
+//                    String user =task.getResult().getUser().getUid();
+//                    FirebaseDatabase.getInstance().getReference().child("Clients").child(user).child("userType").addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                            String userType=snapshot.getValue(String.class);
+//
+//                            if(userType.equals("Client")){
+//                                startActivity(new Intent(MainActivity.this, WelcomeClientActivity.class));
+//                            }
+//                            else if(userType.equals("Cooker")){
+//                                startActivity(new Intent(MainActivity.this, WelcomeCookActivity.class));
+//                            }
+//                        }
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//
+//                        }
+//                    });
                     //diriger vers profil utilisateur
-//                    startActivity(new Intent(MainActivity.this, WelcomeClientActivity.class));
+                   startActivity(new Intent(MainActivity.this, WelcomeClientActivity.class));
                 }else{
                     Toast.makeText(MainActivity.this, "Failed to login check your credentials", Toast.LENGTH_LONG).show();
                 }
