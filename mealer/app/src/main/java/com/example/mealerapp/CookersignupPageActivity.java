@@ -21,145 +21,127 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CookersignupPageActivity extends AppCompatActivity implements View.OnClickListener{
     private Button SignUp;
-    private EditText editTextPrenom, editTextNom, editTextAdresseCourriel, editTextMotDePasse, editTextAdresse, editTextConfirm;
+    public EditText editTextPrenom, editTextNom, editTextAdresseCourriel, editTextMotDePasse, editTextAdresse, editTextConfirm;
     private FirebaseAuth mAuth;
-    @SuppressLint("MissingInflatedId")
+
+    //@SuppressLint("MissingInflatedId")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cookersignup_page);
         mAuth = FirebaseAuth.getInstance();
         SignUp = findViewById(R.id.signUpBttn1);
         SignUp.setOnClickListener(this);
 
-        editTextPrenom =  findViewById(R.id.Prenom1);
-        editTextNom =  findViewById(R.id.Nom1);
-        editTextAdresseCourriel =  findViewById(R.id.AdresseCourriel1);
-        editTextMotDePasse =  findViewById(R.id.SignInPassword);
-        editTextConfirm =  findViewById(R.id.confirm_password1);
-        editTextAdresse =  findViewById(R.id.address);
+        editTextPrenom = findViewById(R.id.Prenom1);
+        editTextNom = findViewById(R.id.Nom1);
+        editTextAdresseCourriel = findViewById(R.id.AdresseCourriel1);
+        editTextMotDePasse = findViewById(R.id.SignInPassword);
+        editTextConfirm = findViewById(R.id.confirm_password1);
+        editTextAdresse = findViewById(R.id.address);
+
+    }
+@Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.signUpBttn1:
+                resisterUser();
+                break;
+        }
 
     }
 
-
-
     private void resisterUser() {
 
-        String Prenom = editTextPrenom.getText().toString().trim();
-        String Nom = editTextNom.getText().toString().trim();
-        String adressecourriel = editTextAdresseCourriel.getText().toString().trim();
-        String MotDePasse = editTextMotDePasse.getText().toString().trim();
-        String Adresse = editTextAdresse.getText().toString().trim();
-        String MotDePasseConfirm = editTextConfirm.getText().toString().trim();
+        String Prenom1 = editTextPrenom.getText().toString().trim();
+        String Nom1 = editTextNom.getText().toString().trim();
+        String adressecourriel1 = editTextAdresseCourriel.getText().toString().trim();
+        String MotDePasse1 = editTextMotDePasse.getText().toString().trim();
+        String Adresse1 = editTextAdresse.getText().toString().trim();
+        String MotDePasseConfirm1 = editTextConfirm.getText().toString().trim();
 
-        if (Prenom.isEmpty()) {
+        if (Prenom1.isEmpty()) {
             editTextPrenom.setError("Prenom est requis");
             editTextPrenom.requestFocus();
             return;
         }
-        if (Nom.isEmpty()) {
+        if (Nom1.isEmpty()) {
             editTextNom.setError(" Nom est requis");
             editTextNom.requestFocus();
             return;
         }
-        if (adressecourriel.isEmpty()) {
+        if (adressecourriel1.isEmpty()) {
             editTextAdresseCourriel.setError(" Adresse couuriel est requis");
             editTextAdresseCourriel.requestFocus();
             return;
         }
-        if (!EMAIL_ADDRESS.matcher(adressecourriel).matches()) {
+        if (!EMAIL_ADDRESS.matcher(adressecourriel1).matches()) {
             editTextAdresseCourriel.setError(" Adresse couuriel non valide");
             editTextAdresseCourriel.requestFocus();
             return;
         }
-        if (MotDePasse.isEmpty()) {
+        if (MotDePasse1.isEmpty()) {
             editTextMotDePasse.setError(" Mot de passse est requis");
             editTextMotDePasse.requestFocus();
-            return;
+          return;
         }
 
-        if (MotDePasse.length() < 8) {
+        if (MotDePasse1.length() < 8) {
             editTextMotDePasse.setError(" Mot de passse a une longeur de 8 characteres");
             editTextMotDePasse.requestFocus();
             return;
         }
 
-        if (MotDePasseConfirm.isEmpty()) {
+        if (MotDePasseConfirm1.isEmpty()) {
             editTextConfirm.setError(" Confirmer votre mot de passe");
             editTextConfirm.requestFocus();
 
             return;
-        }else {
-            if (!MotDePasse.equals(MotDePasseConfirm)) {
+        } else {
+            if (!MotDePasse1.equals(MotDePasseConfirm1)) {
                 editTextConfirm.setError(" Champs ne matche pas Mot de passe");
                 editTextConfirm.requestFocus();
                 return;
             }
         }
-        if (Adresse.isEmpty()) {
+        if (Adresse1.isEmpty()) {
             editTextAdresse.setError(" Une adresse est requis");
             editTextAdresse.requestFocus();
             return;
         }
 
-
-//        if (InformationsCarteCredit.isEmpty()) {
-//            editTextInformationsCarteCredit.setError(" InformationsCarteCrédit est requis");
-//            editTextInformationsCarteCredit.requestFocus();
-//            return;
-//        }
-//        if (cvv.isEmpty()) {
-//            editTextCVV.setError("Prenom est requis");
-//            editTextCVV.requestFocus();
-//            return;
-//        }
-        // progressBar.setVisibility(View.VISIBLE);
-
-        mAuth.createUserWithEmailAndPassword(adressecourriel, MotDePasse)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                            User user=new Cooker(Prenom, Nom, adressecourriel, MotDePasse, Adresse,"Cooker");
-                            FirebaseDatabase.getInstance().getReference("Cookers")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(CookersignupPageActivity.this, "L'utilisateur  enregistrer", Toast.LENGTH_LONG).show();
-                                                //progresseBar.setVisibility(View.GONE);
-                                                //rediriger vers login layout
-                                                startActivity(new Intent(CookersignupPageActivity.this, WelcomeCookActivity.class));
-                                            } else {
-                                                Toast.makeText(CookersignupPageActivity.this, "L'utilisateur  non enregistrer essaiyer encore", Toast.LENGTH_LONG).show();
-                                                //progresseBar.setVisibility(View.GONE);
-
-                                            }
-                                        }
-
-                                    });
-                        }else {
-                            Toast.makeText(CookersignupPageActivity.this,"L'utilisateur  non enregistrer essaiyer encore", Toast.LENGTH_LONG).show();
-                            //progresseBar.setVisibility(View.GONE);
-
-                        }
-                    }
-
-                });
-    }
+        User user=new Cooker(Prenom1,Nom1,adressecourriel1,MotDePasse1,Adresse1,"Cooker","je suis cuisinier");
+        mAuth.createUserWithEmailAndPassword(user.getCourriel() , user.getMotDePasse()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    User Itulisateur =new Cooker();
+                    Itulisateur.setPrenom(Prenom1);
+                    Itulisateur.setAdresse(Adresse1);
+                    Itulisateur.setCourriel(adressecourriel1);
+                    Itulisateur.setUserType("Cooker");
+                    Itulisateur.setNom(Nom1);
+                    Itulisateur.setMotDePasse(MotDePasse1);
+                    FirebaseDatabase.getInstance().getReference("Cookers").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .setValue(Itulisateur).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(CookersignupPageActivity.this,"user registered success",Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(CookersignupPageActivity.this, WelcomeCookActivity.class));
+                                    }else{
+                                        Toast.makeText(CookersignupPageActivity.this,"Failed",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                }else{
+                    Toast.makeText(CookersignupPageActivity.this,"Faileddddd!!!",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-//           case R.id.banner:
-//            StratActivity(new Intent(packageContext.this, MainActivity.class));
-//            break;
-            case R.id.signUpBttn1:
-                resisterUser();
-                break;
-        }
+
 
     }
 }

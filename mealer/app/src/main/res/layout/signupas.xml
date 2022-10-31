@@ -49,8 +49,8 @@
         android:textColorHighlight="#ABBC05"
         android:textColorLink="#B8CA07"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="-29dp"
-        tools:layout_editor_absoluteY="274dp" />
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="392dp" />
 
     <Button
         android:id="@+id/SignUpAsClient"
